@@ -76,13 +76,16 @@ scripts/smoke.mjs         Node-based simulation assertions
 
 ## Deploying
 
-The repository includes a GitHub Actions workflow at
-`.github/workflows/deploy.yml`. Every push to `main` builds the app and publishes
-it to GitHub Pages. The Vite `base` is relative (`./`), so the build works both at
-the repository root and under a GitHub Pages project subpath.
+The production build is published to the `gh-pages` branch:
 
-To publish manually, open **Settings → Pages** in the GitHub repository and set
-the source to **GitHub Actions**, then run the workflow or push to `main`.
+```bash
+npm run deploy
+```
+
+This builds the app and pushes `dist/` to GitHub Pages. The Vite `base` is
+relative (`./`), so the build works both at the repository root and under a
+GitHub Pages project subpath. To update the live site, run `npm run deploy`
+again.
 
 ## Notes
 
