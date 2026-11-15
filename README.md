@@ -89,6 +89,29 @@ src/
 scripts/smoke.mjs         Assertions Node sur le cœur de simulation
 ```
 
+## Machine learning (Python)
+
+Le panneau de prévision n’est plus uniquement heuristique : il exécute un vrai modèle
+de **gradient boosting** entraîné en Python avec **scikit-learn**.
+
+- `ml/generate_data.py` génère un jeu de données synthétique (30 000 lignes) calibré
+  sur le réseau Casablanca et le profil horaire du projet.
+- `ml/train.py` entraîne un `GradientBoostingRegressor` sur une cible `log1p`,
+  calcule MAE / RMSE / R², et exporte les arbres dans
+  `src/data/demand-model.json` (plus un `.joblib` pour l’inférence Python).
+- `ml/predict.py` permet une démonstration d’inférence en Python.
+- `src/lib/demandModel.js` évalue les arbres exportés côté navigateur, donc le site
+  statique GitHub Pages reste autonome (pas de backend).
+
+```bash
+npm run ml:pipeline      # export réseau + données + entraînement
+python ml/predict.py --time 17.5 --scenario rush
+```
+
+Les métriques du modèle (MAE ≈ 4,6 pax / 30 min, R² ≈ 0,98) sont affichées dans
+l’interface. Les données d’entraînement sont régénérables ; le fichier JSON committé
+est celui utilisé par le build.
+
 ## Déploiement
 
 Le build de production est publié sur la branche `gh-pages` :

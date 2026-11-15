@@ -9,7 +9,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "smoke": "node scripts/smoke.mjs",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build && gh-pages -d dist",
+    "ml:network": "node scripts/export-network.mjs",
+    "ml:data": "python ml/generate_data.py",
+    "ml:train": "python ml/train.py",
+    "ml:predict": "python ml/predict.py",
+    "ml:pipeline": "npm run ml:network && python ml/generate_data.py && python ml/train.py"
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.2.8",

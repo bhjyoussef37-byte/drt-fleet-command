@@ -1,0 +1,143 @@
+{
+  "stops": [
+    {
+      "id": "casa-port",
+      "name": "Casa Port",
+      "zone": "Sidi Belyout",
+      "baseRate": 1.22,
+      "lines": [
+        "L01",
+        "L10",
+        "L20"
+      ]
+    },
+    {
+      "id": "anfa",
+      "name": "Anfa",
+      "zone": "Anfa",
+      "baseRate": 0.84,
+      "lines": [
+        "L10",
+        "L33"
+      ]
+    },
+    {
+      "id": "ain-diab",
+      "name": "Aïn Diab",
+      "zone": "Anfa Littoral",
+      "baseRate": 0.52,
+      "lines": [
+        "L20",
+        "L60"
+      ]
+    },
+    {
+      "id": "maarif",
+      "name": "Maârif",
+      "zone": "Maârif",
+      "baseRate": 1.08,
+      "lines": [
+        "L01",
+        "L10",
+        "L40"
+      ]
+    },
+    {
+      "id": "habous",
+      "name": "Habous",
+      "zone": "Habous",
+      "baseRate": 0.66,
+      "lines": [
+        "L15",
+        "L33"
+      ]
+    },
+    {
+      "id": "casa-voyageurs",
+      "name": "Casa Voyageurs",
+      "zone": "Belvédère",
+      "baseRate": 1.15,
+      "lines": [
+        "L01",
+        "L20",
+        "L40",
+        "L70"
+      ]
+    },
+    {
+      "id": "hay-hassani",
+      "name": "Hay Hassani",
+      "zone": "Hay Hassani",
+      "baseRate": 0.62,
+      "lines": [
+        "L40",
+        "L60"
+      ]
+    },
+    {
+      "id": "oasis",
+      "name": "Oasis",
+      "zone": "Oasis",
+      "baseRate": 0.7,
+      "lines": [
+        "L60",
+        "L70",
+        "L90"
+      ]
+    },
+    {
+      "id": "ain-sebaa",
+      "name": "Aïn Sebaâ",
+      "zone": "Aïn Sebaâ",
+      "baseRate": 0.74,
+      "lines": [
+        "L20",
+        "L70"
+      ]
+    },
+    {
+      "id": "sidi-moumen",
+      "name": "Sidi Moumen",
+      "zone": "Sidi Moumen",
+      "baseRate": 0.58,
+      "lines": [
+        "L70",
+        "L90"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "normal",
+      "label": "Trafic normal",
+      "description": "Demande PM de base",
+      "arrivalMult": 1,
+      "stopWeights": {}
+    },
+    {
+      "id": "rush",
+      "label": "Heure de pointe",
+      "description": "Pic des navetteurs",
+      "arrivalMult": 1.68,
+      "stopWeights": {
+        "casa-port": 1.42,
+        "maarif": 1.3,
+        "casa-voyageurs": 1.38,
+        "ain-sebaa": 1.18,
+        "anfa": 1.08
+      }
+    },
+    {
+      "id": "stadium",
+      "label": "Match au Complexe",
+      "description": "Afflux au Complexe Mohammed V",
+      "arrivalMult": 1.55,
+      "stopWeights": {
+        "maarif": 6.2,
+        "casa-voyageurs": 1.4,
+        "casa-port": 1.25,
+        "habous": 1.15
+      }
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { buildForecast } from '../lib/forecast.js';
 import { formatNumber } from '../lib/format.js';
+import { MODEL_META } from '../lib/demandModel.js';
 
 const BAR_LABELS = ['+15m', '+30m', '+45m', '+60m'];
 
@@ -45,6 +46,9 @@ export default function ForecastPanel({ state }) {
               </h2>
               <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.09em] text-zinc-500">
                 Gradient boosting · pas de 15 min
+              </p>
+              <p className="mt-0.5 font-mono text-[7px] uppercase tracking-[0.08em] text-zinc-600">
+                Modèle Python · scikit-learn · MAE {MODEL_META.metrics.mae} pax
               </p>
             </div>
           </div>
