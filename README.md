@@ -7,6 +7,10 @@ optimizer continuously rebalances the fleet.
 
 Built with **React 19**, **Vite 7**, **Tailwind CSS 4**, and **Lucide React**.
 
+## Live demo
+
+**https://bhjyoussef37-byte.github.io/drt-fleet-command/**
+
 ## Run it
 
 ```bash
