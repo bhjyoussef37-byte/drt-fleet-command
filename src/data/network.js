@@ -15,7 +15,7 @@ export const STOPS = [
     radius: 22,
     baseRate: 1.22,
     color: '#ffd400',
-    lines: ['L01', 'L10', 'L20'],
+    lines: ['1', '5', '10'],
   },
   {
     id: 'anfa',
@@ -27,7 +27,7 @@ export const STOPS = [
     radius: 19,
     baseRate: 0.84,
     color: '#ffd400',
-    lines: ['L10', 'L33'],
+    lines: ['2', '10'],
   },
   {
     id: 'ain-diab',
@@ -39,7 +39,7 @@ export const STOPS = [
     radius: 18,
     baseRate: 0.52,
     color: '#ffd400',
-    lines: ['L20', 'L60'],
+    lines: ['2', '60'],
   },
   {
     id: 'maarif',
@@ -51,7 +51,7 @@ export const STOPS = [
     radius: 21,
     baseRate: 1.08,
     color: '#ffd400',
-    lines: ['L01', 'L10', 'L40'],
+    lines: ['1', '40'],
   },
   {
     id: 'habous',
@@ -63,7 +63,7 @@ export const STOPS = [
     radius: 18,
     baseRate: 0.66,
     color: '#ffd400',
-    lines: ['L15', 'L33'],
+    lines: ['5', '15'],
   },
   {
     id: 'casa-voyageurs',
@@ -75,7 +75,7 @@ export const STOPS = [
     radius: 23,
     baseRate: 1.15,
     color: '#ffd400',
-    lines: ['L01', 'L20', 'L40', 'L70'],
+    lines: ['1', '7', '15', '40', '70'],
   },
   {
     id: 'hay-hassani',
@@ -87,7 +87,7 @@ export const STOPS = [
     radius: 18,
     baseRate: 0.62,
     color: '#ffd400',
-    lines: ['L40', 'L60'],
+    lines: ['5', '40', '60'],
   },
   {
     id: 'oasis',
@@ -99,7 +99,7 @@ export const STOPS = [
     radius: 19,
     baseRate: 0.7,
     color: '#ffd400',
-    lines: ['L60', 'L70', 'L90'],
+    lines: ['60', '70'],
   },
   {
     id: 'ain-sebaa',
@@ -111,7 +111,7 @@ export const STOPS = [
     radius: 19,
     baseRate: 0.74,
     color: '#ffd400',
-    lines: ['L20', 'L70'],
+    lines: ['7', '70', '90'],
   },
   {
     id: 'sidi-moumen',
@@ -123,7 +123,7 @@ export const STOPS = [
     radius: 19,
     baseRate: 0.58,
     color: '#ffd400',
-    lines: ['L70', 'L90'],
+    lines: ['7', '70', '90'],
   },
 ];
 
@@ -191,6 +191,20 @@ export const CITY_BLOCKS = [
 /** Decorative Atlantic coastline used by the map. */
 export const COASTLINE =
   'M 0 580 C 30 468 40 404 58 330 C 80 250 96 190 120 140 C 146 86 150 38 148 0';
+
+/** Casabus-style numbered lines serving the Casablanca mesh. */
+export const LINES = [
+  { id: '1', number: 1, name: 'Casa Port ↔ Maârif ↔ Casa Voyageurs', color: '#ffd400', stops: ['casa-port', 'maarif', 'casa-voyageurs'] },
+  { id: '2', number: 2, name: 'Anfa ↔ Aïn Diab', color: '#f59e0b', stops: ['anfa', 'ain-diab'] },
+  { id: '5', number: 5, name: 'Casa Port ↔ Habous ↔ Hay Hassani', color: '#fb923c', stops: ['casa-port', 'habous', 'hay-hassani'] },
+  { id: '7', number: 7, name: 'Casa Voyageurs ↔ Aïn Sebaâ ↔ Sidi Moumen', color: '#eab308', stops: ['casa-voyageurs', 'ain-sebaa', 'sidi-moumen'] },
+  { id: '10', number: 10, name: 'Casa Port ↔ Anfa', color: '#fbbf24', stops: ['casa-port', 'anfa'] },
+  { id: '15', number: 15, name: 'Habous ↔ Casa Voyageurs', color: '#facc15', stops: ['habous', 'casa-voyageurs'] },
+  { id: '40', number: 40, name: 'Maârif ↔ Casa Voyageurs ↔ Hay Hassani', color: '#f59e0b', stops: ['maarif', 'casa-voyageurs', 'hay-hassani'] },
+  { id: '60', number: 60, name: 'Aïn Diab ↔ Hay Hassani ↔ Oasis', color: '#fb923c', stops: ['ain-diab', 'hay-hassani', 'oasis'] },
+  { id: '70', number: 70, name: 'Casa Voyageurs ↔ Oasis ↔ Sidi Moumen', color: '#eab308', stops: ['casa-voyageurs', 'oasis', 'sidi-moumen'] },
+  { id: '90', number: 90, name: 'Aïn Sebaâ ↔ Sidi Moumen', color: '#fbbf24', stops: ['ain-sebaa', 'sidi-moumen'] },
+];
 
 export const SCENARIOS = {
   normal: {

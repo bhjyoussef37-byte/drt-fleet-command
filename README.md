@@ -112,6 +112,27 @@ Les métriques du modèle (MAE ≈ 4,6 pax / 30 min, R² ≈ 0,98) sont affiché
 l’interface. Les données d’entraînement sont régénérables ; le fichier JSON committé
 est celui utilisé par le build.
 
+## Mathématiques et recherche
+
+Le projet distingue deux modèles :
+
+1. **Prévision de la demande** (gradient boosting) — prédit le nombre de voyageurs
+   par arrêt sur 30 min.
+2. **Décision de dispatch** (réseau de neurones MLP) — choisit l’unité optimale pour
+   un arrêt chaud.
+
+La documentation complète des équations, de la fonction de coût, de la
+rétropropagation, de l’optimisation et du chemin de recherche est dans
+[`docs/MATHEMATIQUES.md`](docs/MATHEMATIQUES.md). Elle présente aussi le premier
+pas mathématique (heuristique linéaire) et les étapes suivantes : réseaux profonds,
+GNN, apprentissage par renforcement, optimisation multi-objectif.
+
+## Lignes de bus marocaines
+
+Le réseau est organisé en **lignes numérotées** comme au Maroc (1, 2, 5, 7, 10,
+15, 40, 60, 70, 90). Chaque arrêt expose les lignes qui le desservent et chaque
+bus affiche son numéro de ligne sur la carte.
+
 ## Déploiement
 
 Le build de production est publié sur la branche `gh-pages` :

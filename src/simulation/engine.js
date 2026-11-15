@@ -7,6 +7,7 @@ import {
   timeOfDayFactor,
 } from '../data/network.js';
 import { buildForecast } from '../lib/forecast.js';
+import { predictCost, buildDecisionFeatures } from '../lib/decisionModel.js';
 import { average, clamp } from '../lib/format.js';
 
 export const TOTAL_FLEET = 8;
@@ -31,6 +32,7 @@ const BUS_COLORS = [
 const INITIAL_BUSES = [
   {
     id: 'CASA-01',
+    line: '1',
     from: 'casa-port',
     to: 'maarif',
     progress: 0.42,
@@ -41,6 +43,7 @@ const INITIAL_BUSES = [
   },
   {
     id: 'CASA-02',
+    line: '7',
     from: 'ain-sebaa',
     to: 'casa-voyageurs',
     progress: 0.66,
@@ -51,6 +54,7 @@ const INITIAL_BUSES = [
   },
   {
     id: 'CASA-03',
+    line: '60',
     from: 'oasis',
     to: 'casa-voyageurs',
     progress: 0.3,
@@ -61,6 +65,7 @@ const INITIAL_BUSES = [
   },
   {
     id: 'CASA-04',
+    line: '1',
     from: 'maarif',
     to: 'anfa',
     progress: 0.55,
@@ -71,6 +76,7 @@ const INITIAL_BUSES = [
   },
   {
     id: 'CASA-05',
+    line: '5',
     from: 'habous',
     to: 'hay-hassani',
     progress: 0.22,
@@ -81,6 +87,7 @@ const INITIAL_BUSES = [
   },
   {
     id: 'CASA-06',
+    line: '1',
     from: 'casa-voyageurs',
     to: 'maarif',
     progress: 0,
@@ -91,6 +98,7 @@ const INITIAL_BUSES = [
   },
   {
     id: 'CASA-07',
+    line: '15',
     from: 'casa-voyageurs',
     to: 'habous',
     progress: 0,
@@ -101,6 +109,7 @@ const INITIAL_BUSES = [
   },
   {
     id: 'CASA-08',
+    line: '70',
     from: 'casa-voyageurs',
     to: 'ain-sebaa',
     progress: 0,
@@ -242,6 +251,32 @@ function chooseBusTarget({ bus, stops, buses, scenarioId, simMinutes }) {
   }
 
   return best?.id ?? 'casa-voyageurs';
+}
+
+function selectBestBus(stop, buses, context) {
+  const candidates = buses.filter(
+    (bus) => bus.status === 'active' && bus.target !== stop.id,
+  );
+  if (!candidates.length) return null;
+
+  let best = candidates[0];
+  let bestScore = Infinity;
+  for (const bus of candidates) {
+    let score;
+    try {
+      score = predictCost(buildDecisionFeatures(bus, stop, context));
+    } catch {
+      score =
+        hopDistance(bus.to, stop.id) +
+        (1 - (bus.progress ?? 0)) -
+        (bus.target === stop.id ? 0.9 : 0);
+    }
+    if (Number.isFinite(score) && score < bestScore) {
+      bestScore = score;
+      best = bus;
+    }
+  }
+  return best;
 }
 
 export function createInitialState({ running = true } = {}) {
@@ -478,21 +513,22 @@ function tick(state, realMs) {
     });
     const hotspot = forecast.hotspots[0];
     const activeBuses = buses.filter((bus) => bus.status === 'active');
-    const candidates = hotspot
-      ? activeBuses
-          .filter((bus) => bus.target !== hotspot.id)
-          .sort(
-            (a, b) =>
-              hopDistance(a.to, hotspot.id) - hopDistance(b.to, hotspot.id),
-          )
-      : [];
+    const hotspotBus =
+      hotspot && activeBuses.length
+        ? selectBestBus(hotspot, activeBuses, {
+            ...state,
+            stops,
+            buses,
+            simMinutes: now,
+          })
+        : null;
 
     if (
       hotspot &&
-      candidates.length > 0 &&
+      hotspotBus &&
       (hotspot.waiting >= 3 || hotspot.predicted >= 24)
     ) {
-      const busIndex = buses.findIndex((bus) => bus.id === candidates[0].id);
+      const busIndex = buses.findIndex((bus) => bus.id === hotspotBus.id);
       const bus = buses[busIndex];
       const previousTarget = bus.target ? NODE_MAP[bus.target]?.name : 'patrouille';
       const hops = hopDistance(bus.to, hotspot.id);
@@ -502,7 +538,7 @@ function tick(state, realMs) {
         'OPTIMISEUR',
         hotspot.waiting >= 14 ? 'warning' : 'info',
         `Optimisation du réseau : ${bus.id} redirigé de ${previousTarget} vers ${hotspot.name} après une hausse prévue de +${Math.max(hotspot.lift, 8)} % de la demande.`,
-        `${hotspot.waiting} en attente · ${hops} arrêts · ETA ${(hops * 2.4).toFixed(1)} min · passe #${optimizerPasses}`,
+        `${hotspot.waiting} en attente · ${hops} arrêts · ETA ${(hops * 2.4).toFixed(1)} min · passe #${optimizerPasses} · réseau neuronal`,
       );
       optimizationCooldown = 6.5 + Math.random() * 5.5;
     } else {
@@ -750,11 +786,16 @@ export function simReducer(state, action) {
       const stop = state.stops.find((entry) => entry.id === action.stopId);
       if (!stop) return state;
 
-      const candidates = state.buses
-        .filter((bus) => bus.status === 'active' && bus.target !== stop.id)
-        .sort((a, b) => hopDistance(a.to, stop.id) - hopDistance(b.to, stop.id));
+      const candidates = state.buses.filter(
+        (bus) => bus.status === 'active' && bus.target !== stop.id,
+      );
 
-      if (!candidates.length) {
+      const bus = selectBestBus(stop, candidates, {
+        ...state,
+        stops: state.stops,
+      });
+
+      if (!bus) {
         return {
           ...withLog(
             state,
@@ -766,8 +807,6 @@ export function simReducer(state, action) {
           notice: notice(`Aucune unité disponible pour ${stop.name}.`, 'warning'),
         };
       }
-
-      const bus = candidates[0];
       const buses = state.buses.map((entry) =>
         entry.id === bus.id ? { ...entry, target: stop.id } : entry,
       );
@@ -782,7 +821,7 @@ export function simReducer(state, action) {
         'OPTIMISEUR',
         'warning',
         `Dispatch prioritaire : ${bus.id} redirigé vers ${stop.name} — ${stop.waiting.length} voyageurs en attente.`,
-        `Attente max ${stop.waiting.reduce((max, passenger) => Math.max(max, passenger.wait), 0).toFixed(1)} min · ETA ${(hops * 2.4).toFixed(1)} min`,
+        `Attente max ${stop.waiting.reduce((max, passenger) => Math.max(max, passenger.wait), 0).toFixed(1)} min · ETA ${(hops * 2.4).toFixed(1)} min · réseau neuronal`,
       );
     }
 

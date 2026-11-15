@@ -268,17 +268,17 @@ function ActiveBus({ bus, nodes }) {
         <circle cx="6.8" cy="7.5" r="1.8" fill="#0b0b0d" stroke={bus.color} strokeWidth="0.55" />
       </g>
       <g transform="translate(0 -18.5)">
-        <rect x="-18" y="-6.2" width="36" height="12.4" rx="4.4" fill="#0b0b0d" stroke={bus.color} strokeOpacity="0.4" strokeWidth="0.75" />
+        <rect x="-15" y="-7.5" width="30" height="15" rx="4.4" fill="#0b0b0d" stroke={bus.color} strokeOpacity="0.4" strokeWidth="0.75" />
         <text
           textAnchor="middle"
-          y="2.5"
-          fontSize="7.6"
-          fontWeight="600"
+          y="3"
+          fontSize="9"
+          fontWeight="700"
           fill={bus.color}
           fontFamily="'JetBrains Mono Variable', monospace"
           letterSpacing="0.04em"
         >
-          {bus.id}
+          {bus.line}
         </text>
       </g>
     </g>

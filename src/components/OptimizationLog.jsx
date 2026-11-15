@@ -1,5 +1,6 @@
 import { Cpu, Radio } from 'lucide-react';
 import { formatClock } from '../lib/format.js';
+import { DECISION_MODEL_META } from '../lib/decisionModel.js';
 
 const TAG_STYLES = {
   OPTIMISEUR: {
@@ -56,6 +57,9 @@ export default function OptimizationLog({ logs, optimizerPasses }) {
             </h2>
             <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.09em] text-zinc-500">
               Justification du dispatch · passe #{optimizerPasses}
+            </p>
+            <p className="mt-0.5 font-mono text-[7px] uppercase tracking-[0.08em] text-zinc-600">
+              Réseau neuronal · MLP · MAE {DECISION_MODEL_META.metrics.mae}
             </p>
           </div>
         </div>
