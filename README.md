@@ -1,99 +1,111 @@
-# NEXUS · DRT Fleet Command
+# CASABUS · Réseau Al Baida — Centre de commande
 
-An interactive, dark-mode smart-city control center for a Demand-Responsive Transit
-(DRT) fleet. The prototype runs a live in-browser simulation: passengers arrive at
-stops, queues age by urgency, buses move along the transit mesh, and a mocked ML
-optimizer continuously rebalances the fleet.
+Une simulation interactive du réseau de bus de Casablanca, habillée aux couleurs de
+**Casabus / Al Baida** : jaune vif, gris anthracite, blanc et noir. Le prototype fait
+tourner une simulation entièrement dans le navigateur : les voyageurs arrivent aux
+arrêts, les files vieillissent selon l’urgence, les bus circulent sur le maillage et un
+optimiseur de dispatch rééquilibre la flotte en continu.
 
-Built with **React 19**, **Vite 7**, **Tailwind CSS 4**, and **Lucide React**.
+> **Prototype non affilié.** Projet de démonstration indépendant, sans lien avec
+> Casabus, Alsa Al Baida, Casa Transport ou les autorités de Casablanca. Les données,
+> prévisions et décisions de dispatch sont simulées.
 
-## Live demo
+Développé avec **React 19**, **Vite 7**, **Tailwind CSS 4** et **Lucide React**.
+
+## Démo en ligne
 
 **https://bhjyoussef37-byte.github.io/drt-fleet-command/**
 
-## Run it
+## Lancer le projet
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the printed local URL (defaults to `http://localhost:5173`).
+Ouvrez l’URL affichée (par défaut `http://localhost:5173`).
 
 ```bash
-npm run build    # production bundle in dist/
-npm run preview  # serve the production bundle
-npm run smoke    # headless simulation checks (no browser needed)
+npm run build    # bundle de production dans dist/
+npm run preview  # sert le bundle de production
+npm run smoke    # vérifications headless de la simulation
 ```
 
-## What's inside
+## Contenu
 
-### Live transit map
-- 10 interconnected stops rendered as an accessible SVG network.
-- Passenger request dots build up at each stop and shift green → yellow → red by wait time.
-- Active buses move between stops, reroute based on demand, and board/alight riders.
-- Dedicated portrait layout for mobile; stop labels stay readable as buses pass underneath.
-- Click any stop to open an inspector with queue details, wait distribution, and a
-  one-click **Prioritize pickup** action.
+### Carte du réseau en direct
+- 10 arrêts casablancais interconnectés : Casa Port, Anfa, Aïn Diab, Maârif, Habous,
+  Casa Voyageurs, Hay Hassani, Oasis, Aïn Sebaâ et Sidi Moumen.
+- Les points de demande s’accumulent à chaque arrêt et passent du vert au jaune puis au
+  rouge selon le temps d’attente.
+- Les bus Casabus se déplacent, se redéploient selon la demande et embarquent ou
+  déposent des voyageurs.
+- Trait de côte atlantique, blocs urbains et étiquettes de quartiers en français.
+- Mise en page portrait dédiée aux téléphones ; les libellés restent lisibles.
+- Cliquez sur un arrêt pour ouvrir sa fiche : file d’attente, attente moyenne, ETA,
+  lignes desservies, prévision à 15 min et action **Prioriser la desserte**.
 
-### Control deck
-- Start / Pause, Reset, and **Manual dispatch** (deploys reserve units until 8/8 active).
-- Simulation speed slider at 1×, 2×, or 5×.
-- Demand scenarios: **Normal**, **Rush Hour Surge**, and **Stadium Event Spike**.
-  Switching a scenario injects a burst of requests and re-weights the optimizer.
+### Poste de commande
+- Démarrer / Pause, Réinitialiser et **Déploiement manuel** (jusqu’à 8 unités actives).
+- Curseur de vitesse de simulation : 1×, 2× ou 5×.
+- Scénarios de demande : **Trafic normal**, **Heure de pointe** et
+  **Match au Complexe** (afflux au Complexe Mohammed V, autour de Maârif).
+  Changer de scénario injecte un pic de demandes et rééquilibre l’optimiseur.
 
-### ML demand forecast
-- Four 15-minute bins covering the next hour, with 15 / 30 / 60-minute rollups.
-- Confidence, predicted peak, and the top three demand hotspots.
-- Hotspot selection drives optimizer redirects, shown in the live log.
+### Prévision de la demande (IA)
+- Quatre tranches de 15 minutes sur la prochaine heure, avec cumuls à 15 / 30 / 60 min.
+- Indice de confiance, pic prévu et trois points chauds prioritaires.
+- Les points chauds guident les redirections de l’optimiseur, visibles dans le journal.
 
-### Optimization engine
-- Fleet-level passes redirect the nearest available unit toward forecast hotspots.
-- Queue pressure, longest wait, forecast lift, hop distance, and coverage stacking
-  all contribute to target selection.
-- Every dispatch, reroute, scenario change, and reset is explained in a live log.
+### Moteur d’optimisation
+- Les passes de flotte redirigent l’unité la plus proche vers les points chauds prévus.
+- Pression des files, attente maximale, hausse prévue, distance en arrêts et couverture
+  entrent dans le choix de la cible.
+- Chaque déploiement, redirection, changement de scénario et réinitialisation est
+  expliqué dans le journal en direct.
 
-### Metrics bar
-- Average passenger wait with trend and sparkline.
-- Active fleet vs. depot reserve and utilization %.
-- Total passengers served today with a running delta.
+### Bandeau d’indicateurs
+- Attente moyenne des voyageurs avec tendance et sparkline.
+- Flotte active vs réserve au dépôt, taux d’utilisation.
+- Total de voyageurs servis dans la journée.
 
-## Project structure
+## Structure du projet
 
 ```
 src/
-  App.jsx                 Dashboard shell, layout, and toasts
+  App.jsx                 Coque du tableau de bord, mise en page, notifications
   components/
-    Header.jsx            Brand, live status, sim clock
-    MetricsBar.jsx        Top metric cards and sparklines
-    ControlDeck.jsx       Speed, scenario, and action controls
-    TransitMap.jsx        Interactive SVG network, buses, stop inspector
-    ForecastPanel.jsx     ML forecast chart and hotspots
-    OptimizationLog.jsx   Live dispatch rationale feed
-  simulation/engine.js    Reducer, tick loop, routing, optimizer, metrics
-  data/network.js         Stops, edges, scenarios, BFS routing helpers
-  lib/forecast.js         Mocked ML forecast model
-  lib/format.js           Formatting and urgency helpers
-  hooks/                  Simulation interval and responsive map hooks
-scripts/smoke.mjs         Node-based simulation assertions
+    Header.jsx            Marque Casabus, état direct, horloge de simulation
+    MetricsBar.jsx        Cartes d’indicateurs et sparklines
+    ControlDeck.jsx       Contrôles de vitesse, scénarios et actions
+    TransitMap.jsx        Réseau SVG interactif, bus, fiche arrêt
+    ForecastPanel.jsx     Graphique de prévision et points chauds
+    OptimizationLog.jsx   Flux des décisions de dispatch
+  simulation/engine.js    Reducer, boucle de tick, routage, optimiseur, métriques
+  data/network.js         Arrêts, liaisons, scénarios, routage BFS
+  lib/forecast.js         Modèle de prévision simulé
+  lib/format.js           Formatage français et échelle d’urgence
+  hooks/                  Intervalle de simulation et hooks responsive
+scripts/smoke.mjs         Assertions Node sur le cœur de simulation
 ```
 
-## Deploying
+## Déploiement
 
-The production build is published to the `gh-pages` branch:
+Le build de production est publié sur la branche `gh-pages` :
 
 ```bash
 npm run deploy
 ```
 
-This builds the app and pushes `dist/` to GitHub Pages. The Vite `base` is
-relative (`./`), so the build works both at the repository root and under a
-GitHub Pages project subpath. To update the live site, run `npm run deploy`
-again.
+Cette commande construit l’application et pousse `dist/` vers GitHub Pages. La base Vite
+est relative (`./`), donc le build fonctionne à la racine comme sous un sous-chemin de
+projet GitHub Pages.
 
-## Notes
+## Remarques
 
-- All demand forecasting and optimization logic is intentionally mocked for the
-  demo, but it is stateful and reacts to live queues rather than replaying a video.
-- The simulation is deterministic in structure (same rules every run) while arrival
-  jitter keeps each session different.
+- Toute la prévision et l’optimisation sont volontairement simulées pour la démo, mais
+  l’état est réel et réagit aux files en direct plutôt que de rejouer une vidéo.
+- La simulation est déterministe dans ses règles ; le bruit d’arrivée rend chaque
+  session différente.
+- Identité visuelle inspirée du jaune vif et du gris anthracite de la nouvelle flotte
+  de bus de Casablanca. Aucun logo officiel n’est utilisé.

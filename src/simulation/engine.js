@@ -18,71 +18,71 @@ const BUS_CAPACITY = 16;
 const START_MINUTE = 16 * 60 + 18;
 
 const BUS_COLORS = [
-  '#34d399',
-  '#22d3ee',
-  '#2dd4bf',
-  '#38bdf8',
-  '#a3e635',
+  '#ffd400',
+  '#f5c518',
+  '#ffde59',
   '#fbbf24',
-  '#fb7185',
-  '#c084fc',
+  '#f59e0b',
+  '#fde047',
+  '#eab308',
+  '#fb923c',
 ];
 
 const INITIAL_BUSES = [
   {
-    id: 'NX-01',
-    from: 'university',
-    to: 'central',
+    id: 'CASA-01',
+    from: 'casa-port',
+    to: 'maarif',
     progress: 0.42,
-    target: 'medical',
+    target: 'casa-voyageurs',
     onboard: 3,
     trips: 6,
     status: 'active',
   },
   {
-    id: 'NX-02',
-    from: 'north',
-    to: 'stadium',
+    id: 'CASA-02',
+    from: 'ain-sebaa',
+    to: 'casa-voyageurs',
     progress: 0.66,
-    target: 'stadium',
+    target: 'casa-voyageurs',
     onboard: 2,
     trips: 9,
     status: 'active',
   },
   {
-    id: 'NX-03',
-    from: 'tech',
-    to: 'central',
+    id: 'CASA-03',
+    from: 'oasis',
+    to: 'casa-voyageurs',
     progress: 0.3,
-    target: 'mall',
+    target: 'hay-hassani',
     onboard: 0,
     trips: 4,
     status: 'active',
   },
   {
-    id: 'NX-04',
-    from: 'mall',
-    to: 'riverside',
+    id: 'CASA-04',
+    from: 'maarif',
+    to: 'anfa',
     progress: 0.55,
-    target: 'riverside',
+    target: 'anfa',
     onboard: 4,
     trips: 7,
     status: 'active',
   },
   {
-    id: 'NX-05',
-    from: 'industrial',
-    to: 'airport',
+    id: 'CASA-05',
+    from: 'habous',
+    to: 'hay-hassani',
     progress: 0.22,
-    target: 'airport',
+    target: 'hay-hassani',
     onboard: 1,
     trips: 5,
     status: 'active',
   },
   {
-    id: 'NX-06',
-    from: 'central',
-    to: 'university',
+    id: 'CASA-06',
+    from: 'casa-voyageurs',
+    to: 'maarif',
     progress: 0,
     target: null,
     onboard: 0,
@@ -90,9 +90,9 @@ const INITIAL_BUSES = [
     status: 'depot',
   },
   {
-    id: 'NX-07',
-    from: 'central',
-    to: 'medical',
+    id: 'CASA-07',
+    from: 'casa-voyageurs',
+    to: 'habous',
     progress: 0,
     target: null,
     onboard: 0,
@@ -100,9 +100,9 @@ const INITIAL_BUSES = [
     status: 'depot',
   },
   {
-    id: 'NX-08',
-    from: 'central',
-    to: 'industrial',
+    id: 'CASA-08',
+    from: 'casa-voyageurs',
+    to: 'ain-sebaa',
     progress: 0,
     target: null,
     onboard: 0,
@@ -113,38 +113,38 @@ const INITIAL_BUSES = [
 
 const SEED_LOGS = [
   {
-    tag: 'NETWORK',
+    tag: 'RÉSEAU',
     level: 'success',
-    message: 'Transit mesh synchronized. 10 / 10 stations reporting live demand.',
-    detail: 'Sensor mesh v4.2 · latency 12 ms',
+    message: 'Maillage Casabus synchronisé. 10 / 10 arrêts transmettent la demande en direct.',
+    detail: 'Capteurs du réseau v4.2 · latence 12 ms',
     ago: 0.2,
   },
   {
-    tag: 'FORECAST',
+    tag: 'PRÉVISION',
     level: 'info',
-    message: 'PM commute curve detected. Model expects demand to climb through 17:30.',
-    detail: 'Gradient-boosted forecaster · confidence 94.1%',
+    message: 'Pic de pointe détecté. Le modèle prévoit une hausse de la demande jusqu’à 17:30.',
+    detail: 'Modèle gradient boosting · confiance 94,1 %',
     ago: 1.2,
   },
   {
-    tag: 'DISPATCH',
+    tag: 'DÉPLOIEMENT',
     level: 'success',
-    message: 'NX-04 serving Mall → Riverside with 4 riders aboard.',
-    detail: 'ETA 2.4 min · on schedule',
+    message: 'CASA-04 dessert Maârif → Anfa avec 4 voyageurs à bord.',
+    detail: 'ETA 2,4 min · à l’heure',
     ago: 2.4,
   },
   {
-    tag: 'OPTIMIZER',
+    tag: 'OPTIMISEUR',
     level: 'info',
-    message: 'Optimizer holding 3 units in depot reserve for demand spikes.',
-    detail: 'Reserve 37.5% · rebalance horizon 20 min',
+    message: 'L’optimiseur maintient 3 unités en réserve pour absorber les pics de demande.',
+    detail: 'Réserve 37,5 % · horizon de rééquilibrage 20 min',
     ago: 3.7,
   },
   {
-    tag: 'ALERT',
+    tag: 'ALERTE',
     level: 'warning',
-    message: 'University queue approaching 9 min average wait.',
-    detail: 'Auto-priority candidate · monitoring',
+    message: 'File d’attente à Casa Port proche de 9 min d’attente moyenne.',
+    detail: 'Candidat priorité auto · surveillance',
     ago: 4.8,
   },
 ];
@@ -241,7 +241,7 @@ function chooseBusTarget({ bus, stops, buses, scenarioId, simMinutes }) {
     }
   }
 
-  return best?.id ?? 'central';
+  return best?.id ?? 'casa-voyageurs';
 }
 
 export function createInitialState({ running = true } = {}) {
@@ -415,10 +415,10 @@ function tick(state, realMs) {
     const exchange = delivered + boardCount;
     if (exchange >= 8 && bus.trips % 2 === 0) {
       pushLog(
-        'DISPATCH',
+        'DÉPLOIEMENT',
         at.waiting.length > 10 ? 'warning' : 'success',
-        `${bus.id} exchanged riders at ${at.name} — ${delivered} alighted, ${boardCount} boarded.`,
-        `${at.waiting.length} still queued · load ${Math.round((boardCount / bus.capacity) * 100)}%`,
+        `${bus.id} a échangé des voyageurs à ${at.name} — ${delivered} descendus, ${boardCount} montés.`,
+        `${at.waiting.length} encore en file · charge ${Math.round((boardCount / bus.capacity) * 100)} %`,
       );
     }
 
@@ -494,25 +494,25 @@ function tick(state, realMs) {
     ) {
       const busIndex = buses.findIndex((bus) => bus.id === candidates[0].id);
       const bus = buses[busIndex];
-      const previousTarget = bus.target ? NODE_MAP[bus.target]?.name : 'patrol';
+      const previousTarget = bus.target ? NODE_MAP[bus.target]?.name : 'patrouille';
       const hops = hopDistance(bus.to, hotspot.id);
       buses[busIndex] = { ...bus, target: hotspot.id };
       optimizerPasses += 1;
       pushLog(
-        'OPTIMIZER',
+        'OPTIMISEUR',
         hotspot.waiting >= 14 ? 'warning' : 'info',
-        `Optimizing fleet: ${bus.id} redirected from ${previousTarget} to ${hotspot.name} due to a predicted +${Math.max(hotspot.lift, 8)}% passenger surge.`,
-        `${hotspot.waiting} waiting · ${hops} stops out · ETA ${(hops * 2.4).toFixed(1)} min · pass #${optimizerPasses}`,
+        `Optimisation du réseau : ${bus.id} redirigé de ${previousTarget} vers ${hotspot.name} après une hausse prévue de +${Math.max(hotspot.lift, 8)} % de la demande.`,
+        `${hotspot.waiting} en attente · ${hops} arrêts · ETA ${(hops * 2.4).toFixed(1)} min · passe #${optimizerPasses}`,
       );
       optimizationCooldown = 6.5 + Math.random() * 5.5;
     } else {
       optimizerPasses += 1;
       if (Math.random() < 0.55) {
         pushLog(
-          'OPTIMIZER',
+          'OPTIMISEUR',
           'info',
-          'Optimizer pass complete — current fleet coverage is within target bounds.',
-          `No reroute required · reserve ${buses.filter((bus) => bus.status === 'depot').length} units · pass #${optimizerPasses}`,
+          'Passe d’optimisation terminée — la couverture de flotte est dans les cibles.',
+          `Aucune redirection · réserve ${buses.filter((bus) => bus.status === 'depot').length} unités · passe #${optimizerPasses}`,
         );
       }
       optimizationCooldown = 5 + Math.random() * 4;
@@ -600,19 +600,19 @@ export function selectMetrics(state) {
 function burstForScenario(scenarioId) {
   if (scenarioId === 'rush') {
     return {
-      central: 8,
-      university: 6,
-      tech: 5,
-      north: 4,
-      mall: 3,
+      'casa-port': 8,
+      'casa-voyageurs': 7,
+      maarif: 6,
+      'ain-sebaa': 4,
+      anfa: 3,
     };
   }
   if (scenarioId === 'stadium') {
     return {
-      stadium: 18,
-      central: 6,
-      mall: 4,
-      tech: 3,
+      maarif: 18,
+      'casa-voyageurs': 6,
+      'casa-port': 4,
+      habous: 3,
     };
   }
   return {};
@@ -629,18 +629,20 @@ export function simReducer(state, action) {
         ...state,
         running,
         notice: notice(
-          running ? 'Simulation resumed — optimizer live.' : 'Simulation paused.',
+          running ? 'Simulation reprise — optimiseur actif.' : 'Simulation en pause.',
           running ? 'success' : 'info',
         ),
       };
       return withLog(
         next,
-        'SYSTEM',
+        'SYSTÈME',
         'info',
         running
-          ? 'Simulation resumed. Fleet positions and demand queues unfrozen.'
-          : 'Simulation paused by operator. Fleet holding positions.',
-        running ? 'Clock restarted · auto-optimizer online' : 'Queues frozen · telemetry still streaming',
+          ? 'Simulation reprise. Positions de flotte et files de demande dégelées.'
+          : 'Simulation mise en pause par l’opérateur. Flotte maintenue.',
+        running
+          ? 'Horloge relancée · optimiseur auto en ligne'
+          : 'Files figées · télémétrie toujours active',
       );
     }
 
@@ -676,16 +678,16 @@ export function simReducer(state, action) {
         nextPassengerId,
         optimizationCooldown: Math.min(state.optimizationCooldown, 1),
         notice: notice(
-          `${scenario.label} activated${injected ? ` · ${injected} new requests injected` : ''}.`,
+          `Scénario activé : ${scenario.label}${injected ? ` · ${injected} demandes injectées` : ''}.`,
           'info',
         ),
       };
       return withLog(
         next,
-        'SCENARIO',
+        'SCÉNARIO',
         action.scenario === 'normal' ? 'info' : 'warning',
-        `Demand profile switched to ${scenario.label}. Forecast model re-weighted${injected ? ` and ${injected} requests injected` : ''}.`,
-        `${scenario.description} · arrival multiplier ${scenario.arrivalMult.toFixed(2)}× · optimizer rebalancing`,
+        `Profil de demande : ${scenario.label}. Modèle de prévision rééquilibré${injected ? ` et ${injected} demandes injectées` : ''}.`,
+        `${scenario.description} · multiplicateur ${scenario.arrivalMult.toFixed(2)}× · rééquilibrage de l’optimiseur`,
       );
     }
 
@@ -695,20 +697,20 @@ export function simReducer(state, action) {
         return {
           ...withLog(
             state,
-            'ALERT',
+            'ALERTE',
             'warning',
-            'Manual dispatch rejected — all 8 fleet units are already active.',
-            'Return a unit to depot before deploying another.',
+            'Déploiement manuel refusé — les 8 unités sont déjà actives.',
+            'Retournez une unité au dépôt avant tout nouveau déploiement.',
           ),
-          notice: notice('All 8 units are already deployed.', 'warning'),
+          notice: notice('Les 8 unités sont déjà déployées.', 'warning'),
         };
       }
 
       const targetStop =
         (action.stopId && state.stops.find((stop) => stop.id === action.stopId)) ||
         busiestStop(state.stops);
-      const target = targetStop?.id ?? 'central';
-      const from = target === 'central' ? 'university' : 'central';
+      const target = targetStop?.id ?? 'casa-voyageurs';
+      const from = target === 'casa-voyageurs' ? 'maarif' : 'casa-voyageurs';
       const to = nextHopToward(from, target) || target;
       const busIndex = state.buses.findIndex((bus) => bus.id === parked.id);
       const deployed = {
@@ -731,16 +733,16 @@ export function simReducer(state, action) {
         buses,
         optimizationCooldown: Math.min(state.optimizationCooldown, 1.5),
         notice: notice(
-          `${deployed.id} dispatched to ${targetStop?.name ?? 'Central Station'}.`,
+          `${deployed.id} déployé vers ${targetStop?.name ?? 'Casa Voyageurs'}.`,
           'success',
         ),
       };
       return withLog(
         next,
-        'DISPATCH',
+        'DÉPLOIEMENT',
         'success',
-        `Manual dispatch: ${deployed.id} rolled out to ${targetStop?.name ?? 'Central Station'}.`,
-        `${targetStop?.waiting.length ?? 0} waiting now · ${remaining} unit${remaining === 1 ? '' : 's'} remaining in reserve`,
+        `Déploiement manuel : ${deployed.id} envoyé vers ${targetStop?.name ?? 'Casa Voyageurs'}.`,
+        `${targetStop?.waiting.length ?? 0} en attente · ${remaining} unité${remaining === 1 ? '' : 's'} en réserve`,
       );
     }
 
@@ -756,12 +758,12 @@ export function simReducer(state, action) {
         return {
           ...withLog(
             state,
-            'ALERT',
+            'ALERTE',
             'warning',
-            `Priority request for ${stop.name} — every active unit is already assigned.`,
-            'Manual reserve dispatch is available from the control deck.',
+            `Demande prioritaire pour ${stop.name} — toutes les unités actives sont déjà affectées.`,
+            'Le déploiement manuel est disponible depuis le poste de commande.',
           ),
-          notice: notice(`No unassigned units available for ${stop.name}.`, 'warning'),
+          notice: notice(`Aucune unité disponible pour ${stop.name}.`, 'warning'),
         };
       }
 
@@ -773,14 +775,14 @@ export function simReducer(state, action) {
       const next = {
         ...state,
         buses,
-        notice: notice(`${bus.id} rerouted to ${stop.name}.`, 'success'),
+        notice: notice(`${bus.id} redirigé vers ${stop.name}.`, 'success'),
       };
       return withLog(
         next,
-        'OPTIMIZER',
+        'OPTIMISEUR',
         'warning',
-        `Priority dispatch: ${bus.id} rerouted to ${stop.name} — ${stop.waiting.length} passengers waiting.`,
-        `Longest wait ${stop.waiting.reduce((max, passenger) => Math.max(max, passenger.wait), 0).toFixed(1)} min · ETA ${(hops * 2.4).toFixed(1)} min`,
+        `Dispatch prioritaire : ${bus.id} redirigé vers ${stop.name} — ${stop.waiting.length} voyageurs en attente.`,
+        `Attente max ${stop.waiting.reduce((max, passenger) => Math.max(max, passenger.wait), 0).toFixed(1)} min · ETA ${(hops * 2.4).toFixed(1)} min`,
       );
     }
 
@@ -796,14 +798,14 @@ export function simReducer(state, action) {
       const fresh = createInitialState({ running: false });
       const reset = {
         ...fresh,
-        notice: notice('Simulation reset — baseline network restored.', 'info'),
+        notice: notice('Simulation réinitialisée — réseau de base restauré.', 'info'),
       };
       return withLog(
         reset,
-        'SYSTEM',
+        'SYSTÈME',
         'info',
-        'Simulation reset by operator. Fleet returned to baseline deployment.',
-        '5 active · 3 in depot · demand model restored to Normal profile',
+        'Simulation réinitialisée par l’opérateur. Flotte au déploiement de base.',
+        '5 actives · 3 en réserve · profil Trafic normal restauré',
       );
     }
 

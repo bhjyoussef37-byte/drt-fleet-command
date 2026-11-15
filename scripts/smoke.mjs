@@ -63,7 +63,7 @@ check('scenario switch injects demand and re-weights the forecast', () => {
   const rush = simReducer(initial, { type: 'SET_SCENARIO', scenario: 'rush' });
   assert.equal(rush.scenario, 'rush');
   assert.ok(selectMetrics(rush).waitingTotal > selectMetrics(initial).waitingTotal);
-  assert.ok(rush.logs[0].message.includes('Rush Hour Surge'));
+  assert.ok(rush.logs[0].message.includes('Heure de pointe'));
 
   const stadium = simReducer(initial, { type: 'SET_SCENARIO', scenario: 'stadium' });
   const stadiumForecast = buildForecast({
@@ -71,7 +71,7 @@ check('scenario switch injects demand and re-weights the forecast', () => {
     scenarioId: 'stadium',
     stops: stadium.stops,
   });
-  assert.equal(stadiumForecast.hotspots[0].id, 'stadium');
+  assert.equal(stadiumForecast.hotspots[0].id, 'maarif');
 });
 
 check('manual dispatch deploys all reserve units then disables', () => {
@@ -82,14 +82,14 @@ check('manual dispatch deploys all reserve units then disables', () => {
   assert.equal(selectMetrics(state).activeFleet, TOTAL_FLEET);
   assert.equal(selectMetrics(state).parkedFleet, 0);
   const blocked = simReducer(state, { type: 'DISPATCH_MANUAL' });
-  assert.match(blocked.logs[0].message, /rejected/i);
+  assert.match(blocked.logs[0].message, /refusé/i);
 });
 
 check('priority dispatch reroutes the closest unit', () => {
-  const stop = initial.stops.find((entry) => entry.id === 'airport');
+  const stop = initial.stops.find((entry) => entry.id === 'ain-diab');
   const next = simReducer(initial, { type: 'PRIORITIZE_STOP', stopId: stop.id });
-  assert.ok(next.logs[0].message.includes('Airport Terminal'));
-  assert.ok(next.buses.some((bus) => bus.target === 'airport'));
+  assert.ok(next.logs[0].message.includes('Aïn Diab'));
+  assert.ok(next.buses.some((bus) => bus.target === 'ain-diab'));
 });
 
 check('forecast returns 15 / 30 / 60 minute horizons with hotspots', () => {

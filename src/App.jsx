@@ -24,15 +24,15 @@ const TOAST_META = {
   },
   info: {
     icon: Info,
-    border: 'border-cyan-400/25',
-    iconColor: 'text-cyan-300',
-    glow: 'shadow-[0_20px_60px_-20px_rgba(0,0,0,.9),0_0_30px_-18px_rgba(34,211,238,.75)]',
+    border: 'border-yellow-400/25',
+    iconColor: 'text-yellow-300',
+    glow: 'shadow-[0_20px_60px_-20px_rgba(0,0,0,.9),0_0_30px_-18px_rgba(255,212,0,.75)]',
   },
   warning: {
     icon: AlertTriangle,
-    border: 'border-amber-400/25',
-    iconColor: 'text-amber-300',
-    glow: 'shadow-[0_20px_60px_-20px_rgba(0,0,0,.9),0_0_30px_-18px_rgba(251,191,36,.7)]',
+    border: 'border-orange-400/25',
+    iconColor: 'text-orange-300',
+    glow: 'shadow-[0_20px_60px_-20px_rgba(0,0,0,.9),0_0_30px_-18px_rgba(251,146,60,.7)]',
   },
 };
 
@@ -58,8 +58,9 @@ export default function App() {
   return (
     <div className="relative min-h-screen">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-48 left-1/3 h-[460px] w-[760px] -translate-x-1/2 rounded-full bg-emerald-500/[0.035] blur-[120px]" />
-        <div className="absolute -right-40 top-12 h-[400px] w-[500px] rounded-full bg-cyan-500/[0.025] blur-[110px]" />
+        <div className="zellige absolute inset-0" />
+        <div className="absolute -top-48 left-1/3 h-[460px] w-[760px] -translate-x-1/2 rounded-full bg-yellow-400/[0.045] blur-[120px]" />
+        <div className="absolute -right-40 top-12 h-[400px] w-[500px] rounded-full bg-rose-500/[0.025] blur-[110px]" />
         <div className="absolute bottom-0 left-0 h-[260px] w-[520px] rounded-full bg-emerald-500/[0.018] blur-[100px]" />
       </div>
 
@@ -108,19 +109,20 @@ export default function App() {
         <footer className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.045] px-1 pt-3 font-mono text-[7px] uppercase tracking-[0.12em] text-zinc-700 sm:text-[7.5px]">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
             <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="h-2.5 w-2.5 text-emerald-400/45" />
-              NEXUS OS 4.2.1
+              <ShieldCheck className="h-2.5 w-2.5 text-yellow-400/55" />
+              CASABUS · RÉSEAU AL BAIDA
             </span>
-            <span>Autonomous dispatch sandbox</span>
-            <span className="hidden sm:inline">10-stop mesh · in-browser inference</span>
+            <span>Bac à sable de dispatch autonome</span>
+            <span className="hidden sm:inline">Maillage 10 arrêts · inférence locale</span>
+            <span className="hidden lg:inline">Prototype non affilié · démonstration</span>
           </div>
           <div className="flex items-center gap-4">
             <span className="inline-flex items-center gap-1.5">
-              <Waves className="h-2.5 w-2.5 text-cyan-400/45" />
-              Sensor stream nominal
+              <Waves className="h-2.5 w-2.5 text-yellow-400/50" />
+              Flux capteurs nominal
             </span>
             <span className="text-zinc-600">
-              {state.running ? 'Simulation running' : 'Simulation paused'}
+              {state.running ? 'Simulation en cours' : 'Simulation en pause'}
             </span>
           </div>
         </footer>
@@ -143,7 +145,7 @@ export default function App() {
             type="button"
             onClick={() => setToast(null)}
             className="focus-ring flex h-6 w-6 shrink-0 items-center justify-center rounded-md font-mono text-[14px] leading-none text-zinc-600 transition-colors hover:bg-white/[0.05] hover:text-zinc-300"
-            aria-label="Dismiss notification"
+            aria-label="Fermer la notification"
           >
             ×
           </button>

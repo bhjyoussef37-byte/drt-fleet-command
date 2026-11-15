@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "NEXUS - Demand-Responsive Transit Fleet Optimization Control Center",
+  "description": "CASABUS · Réseau Al Baida — simulation et centre de commande du réseau de bus de Casablanca (prototype non affilié)",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource-variable/noto-kufi-arabic": "^5.3.0",
     "@fontsource-variable/space-grotesk": "^5.2.8",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",

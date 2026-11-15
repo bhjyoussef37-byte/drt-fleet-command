@@ -12,7 +12,7 @@ export function formatClock(minutes, seconds = false) {
 }
 
 export function formatNumber(value) {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('fr-FR', {
     maximumFractionDigits: 0,
   }).format(Math.round(value));
 }
@@ -36,19 +36,19 @@ export function waitTone(wait) {
     return {
       color: '#34d399',
       soft: 'rgba(52, 211, 153, 0.16)',
-      label: 'On track',
+      label: 'À l’heure',
     };
   }
   if (wait < 12) {
     return {
       color: '#facc15',
       soft: 'rgba(250, 204, 21, 0.16)',
-      label: 'Building',
+      label: 'En hausse',
     };
   }
   return {
     color: '#fb7185',
     soft: 'rgba(251, 113, 133, 0.16)',
-    label: 'Critical',
+    label: 'Critique',
   };
 }
