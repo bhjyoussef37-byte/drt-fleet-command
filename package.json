@@ -11,10 +11,10 @@
     "smoke": "node scripts/smoke.mjs",
     "deploy": "npm run build && gh-pages -d dist",
     "ml:network": "node scripts/export-network.mjs",
-    "ml:data": "python ml/generate_data.py",
-    "ml:train": "python ml/train.py",
-    "ml:predict": "python ml/predict.py",
-    "ml:pipeline": "npm run ml:network && python ml/generate_data.py && python ml/train.py"
+    "ml:data": "node scripts/run-python.mjs ml/generate_data.py",
+    "ml:train": "node scripts/run-python.mjs ml/train.py",
+    "ml:predict": "node scripts/run-python.mjs ml/predict.py",
+    "ml:pipeline": "npm run ml:network && node scripts/run-python.mjs ml/generate_data.py && node scripts/run-python.mjs ml/train.py"
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
